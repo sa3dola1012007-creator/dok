@@ -12,7 +12,7 @@
             margin: 0; padding: 0; overflow-x: hidden; position: relative; min-height: 100vh;
         }
 
-        /* حاوية القلوب */
+        /* 1. تأثيرات الخلفية والقلوب */
         #hearts-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
         .floating-heart { position: absolute; bottom: -50px; color: #ff69b4; animation: floatUp linear forwards; opacity: 0.6; }
         @keyframes floatUp {
@@ -23,69 +23,88 @@
 
         .hidden { display: none !important; }
 
-        /* الشاشات الرئيسية */
+        /* 2. الواجهة الرئيسية */
         #main-card {
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
             z-index: 100; text-align: center; padding: 40px; border: 2px solid rgba(255, 105, 180, 0.5);
             border-radius: 25px; background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(5px);
-            width: 90%; max-width: 500px;
+            width: 90%; max-width: 500px; box-shadow: 0 0 30px rgba(255, 105, 180, 0.2);
         }
-
-        #notebook-container { width: 95%; max-width: 900px; margin: 40px auto; position: relative; z-index: 10; }
-        .notebook-pages { background-color: #fff9e6; color: #333; border-radius: 15px; padding: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
-        
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .gallery-item { background: #fff; padding: 10px; border-radius: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; border: 1px solid #ddd; }
-        .gallery-item img { width: 100%; height: 250px; object-fit: cover; border-radius: 3px; }
-        .gallery-item p { margin: 10px 0; font-family: 'Scheherazade New', serif; font-size: 1.3em; color: #ff1493; font-weight: bold; }
 
         .surprise-btn {
             background: linear-gradient(45deg, #ff1493, #ff69b4, #ff1493); background-size: 200% auto;
             color: #ffffff; border: none; padding: 15px 35px; font-size: 1.1em; font-weight: bold;
             border-radius: 50px; cursor: pointer; transition: 0.3s; margin-top: 15px;
         }
+        .surprise-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px #ff1493; }
 
-        /* شاشة الـ 7 ثواني والكويز */
+        /* 3. معرض الصور وتأثير الاهتزاز */
+        #notebook-container { width: 95%; max-width: 900px; margin: 40px auto; position: relative; z-index: 10; }
+        .notebook-pages { background-color: #fff9e6; color: #333; border-radius: 15px; padding: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
+        
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        
+        .gallery-item { 
+            background: #fff; padding: 10px; border-radius: 5px; border: 1px solid #ddd;
+            transition: all 0.3s ease; transform: rotate(-1deg); cursor: zoom-in;
+        }
+        .gallery-item:nth-child(even) { transform: rotate(1deg); }
+
+        .gallery-item:hover {
+            transform: scale(1.08) rotate(0deg);
+            z-index: 50;
+            box-shadow: 0 15px 35px rgba(255, 20, 147, 0.4);
+            animation: imgShake 0.5s infinite;
+        }
+
+        @keyframes imgShake {
+            0% { transform: scale(1.08) rotate(0deg); }
+            25% { transform: scale(1.08) rotate(2deg); }
+            75% { transform: scale(1.08) rotate(-2deg); }
+            100% { transform: scale(1.08) rotate(0deg); }
+        }
+
+        .gallery-item img { width: 100%; height: 250px; object-fit: cover; border-radius: 3px; }
+        .gallery-item p { margin: 10px 0; font-family: 'Scheherazade New', serif; font-size: 1.3em; color: #ff1493; font-weight: bold; }
+
+        /* 4. شاشات الكويز والدراما */
         .overlay-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 1000; display: flex; flex-direction: column; justify-content: center;
             align-items: center; text-align: center;
         }
-
-        #intro-warning { background: #000; color: #ff1493; z-index: 2000; }
-
-        .envelope {
-            background: #fff9e6; color: #333; padding: 30px; border-radius: 15px;
-            box-shadow: 0 10px 50px rgba(0,0,0,0.8); width: 90%; max-width: 450px;
-            border: 3px solid #ff1493; position: relative; z-index: 2100;
+        #intro-warning { background: #000; color: #ff1493; z-index: 2000; padding: 20px; }
+        .envelope { background: #fff9e6; color: #333; padding: 30px; border-radius: 15px; box-shadow: 0 10px 50px rgba(0,0,0,0.8); width: 85%; max-width: 450px; border: 3px solid #ff1493; position: relative; }
+        #error-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(139, 0, 0, 0.95); z-index: 5000; display: none; flex-direction: column; justify-content: center; align-items: center; }
+        
+        /* التعديل هنا لظهور الرسائل بشكل كامل على الموبايل */
+        #funny-msg-overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.95); z-index: 4000; 
+            display: none; justify-content: center; align-items: center; 
+            text-align: center; padding: 20px; color: #ff69b4; 
+            font-size: 1.6em; line-height: 1.5; flex-direction: column;
+            overflow-y: auto; /* يضيف سكرول لو الرسالة أطول من الشاشة */
         }
-
-        /* المصيبة (الغلط) */
-        #error-overlay { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(139, 0, 0, 0.95); z-index: 5000; display: none;
-            flex-direction: column; justify-content: center; align-items: center;
-        }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-15px); } 75% { transform: translateX(15px); } }
-
-        #funny-msg-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); z-index: 4000; display: none;
-            justify-content: center; align-items: center; text-align: center;
-            padding: 40px; color: #ff69b4; font-size: 2em; font-family: 'Amiri', serif;
-        }
-
+        
+        @keyframes shakeScreen { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-15px); } 75% { transform: translateX(15px); } }
         .back-btn { position: absolute; top: 10px; left: 10px; background: none; border: 1px solid #ff1493; color: #ff1493; border-radius: 5px; cursor: pointer; }
-        input[type="text"] { padding: 12px; width: 80%; border-radius: 10px; border: 2px solid #ff1493; margin-bottom: 15px; text-align: center; font-size: 1.1em; }
+        input[type="text"] { padding: 12px; width: 90%; max-width: 300px; border-radius: 10px; border: 2px solid #ff1493; margin-bottom: 15px; text-align: center; font-size: 1.1em; }
+
+        /* تأثير تكبير الصور (Modal) */
+        #img-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9);
+            z-index: 9999; display: none; justify-content: center; align-items: center; cursor: zoom-out;
+        }
+        #img-modal img { max-width: 90%; max-height: 90%; border: 3px solid #fff; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-    <audio id="bg-music" loop>
-        <source src="song.mp3" type="audio/mpeg">
-    </audio>
-
+    <audio id="bg-music" loop><source src="song.mp3" type="audio/mpeg"></audio>
     <div id="hearts-container"></div>
+
+    <div id="img-modal" onclick="this.style.display='none'"><img src="" id="modal-img"></div>
 
     <div id="main-card">
         <h1 style="color: #ff69b4;">في حب الشوش</h1>
@@ -95,17 +114,17 @@
 
     <div id="notebook-container" class="hidden">
         <div class="notebook-pages">
-            <h2 style="text-align: center; color: #ff1493; font-family: 'Amiri'; font-size: 2.5em;">دفتر ذكرياتنا</h2>
+            <h2 style="text-align: center; color: #ff1493; font-family: 'Amiri'; font-size: 2em;">دفتر ذكرياتنا</h2>
             <div class="gallery-grid">
-                <div class="gallery-item"><img src="img1.jpg" alt="1"><p>أحلى ضحكة</p></div>
-                <div class="gallery-item"><img src="img2.jpg" alt="2"><p>يوم ما يتنسيش</p></div>
-                <div class="gallery-item"><img src="img3.jpg" alt="3"><p>كلامك اللي بيريحني</p></div>
-                <div class="gallery-item"><img src="img4.jpg" alt="4"><p>خروجاتنا</p></div>
-                <div class="gallery-item"><img src="img5.jpg" alt="5"><p>راحة وأمان</p></div>
-                <div class="gallery-item"><img src="img6.jpg" alt="6"><p>سند لبعض</p></div>
-                <div class="gallery-item"><img src="img7.jpg" alt="7"><p>خطوتنا سوا</p></div>
-                <div class="gallery-item"><img src="img8.jpg" alt="8"><p>بيتزا وديري ميلك 😂</p></div>
-                <div class="gallery-item"><img src="img9.jpg" alt="9"><p>أحلى صدفة</p></div>
+                <div class="gallery-item" onclick="zoomImg(this)"><img src="img1.jpg" alt="1"><p>أحلى ضحكة</p></div>
+                <div class="gallery-item" onclick="zoomImg(this)"><img src="img2.jpg" alt="2"><p>يوم ما يتنسيش</p></div>
+                <div class="gallery-item" onclick="zoomImg(this)"><img src="img3.jpg" alt="3"><p>كلامك اللي بيريحني</p></div>
+                <div class="gallery-item" onclick="zoomImg(this)"><img src="img4.jpg" alt="4"><p>خروجاتنا</p></div>
+                <div class="gallery-item" onclick="zoomImg(this)"><img src="img5.jpg" alt="5"><p>راحة وأمان</p></div>
+                <div class="gallery-item" onclick="zoomImg(this)"><img src="img6.jpg" alt="6"><p>سند لبعض</p></div>
+                <div class="gallery-item" onclick="zoomImg(this)"><img src="img7.jpg" alt="7"><p>خطوتنا سوا</p></div>
+                <div class="gallery-item" onclick="zoomImg(this)"><img src="img8.jpg" alt="8"><p>بيتزا وديري ميلك 😂</p></div>
+                <div class="gallery-item" onclick="zoomImg(this)"><img src="img9.jpg" alt="9"><p>أحلى صدفة</p></div>
             </div>
             
             <div style="text-align: center; margin-top: 40px;">
@@ -120,11 +139,7 @@
     </div>
 
     <div id="intro-warning" class="overlay-screen hidden">
-        <h1 style="font-size: 2.5em; line-height: 1.8;">
-            دلوقتي ياما هكمل معاكي..<br>
-            ياما هرميكي لو جاوبتي غلط..<br>
-            يارب تجاوبي غلط 😶
-        </h1>
+        <h1 style="font-size: 1.8em; line-height: 1.8; padding: 15px;">دلوقتي ياما هكمل معاكي..<br>ياما هرميكي لو جاوبتي غلط..<br>يارب تجاوبي غلط 😶</h1>
     </div>
 
     <div id="envelope-quiz" class="overlay-screen hidden" style="background: rgba(0,0,0,0.9);">
@@ -135,8 +150,8 @@
     </div>
 
     <div id="error-overlay">
-        <img src="photo.png" alt="مصيبة" style="width: 250px; border: 5px solid #ff0000; border-radius: 20px; animation: shake 0.2s infinite;">
-        <div style="font-size: 8rem; color: #ff0000; text-shadow: 0 0 30px #000;">❌</div>
+        <img src="photo.png" alt="مصيبة" style="width: 200px; border: 5px solid #ff0000; border-radius: 20px; animation: shakeScreen 0.2s infinite;">
+        <div style="font-size: 4rem; color: #ff0000; text-shadow: 0 0 30px #000;">❌</div>
         <h2 style="color: #fff;">عملتي مصيبة يا شوش! 🔥</h2>
     </div>
 
@@ -155,10 +170,18 @@
         }
         setInterval(createHeart, 400);
 
+        function zoomImg(el) {
+            const modal = document.getElementById('img-modal');
+            const modalImg = document.getElementById('modal-img');
+            modal.style.display = "flex";
+            modalImg.src = el.querySelector('img').src;
+        }
+
         function startProcess() {
             document.getElementById('bg-music').play().catch(()=>{});
             document.getElementById('main-card').classList.add('hidden');
             document.getElementById('notebook-container').classList.remove('hidden');
+            document.body.style.overflowY = "auto";
         }
 
         let quizStep = 1;
@@ -168,6 +191,8 @@
         function startTheTrap() {
             document.getElementById('notebook-container').classList.add('hidden');
             document.getElementById('intro-warning').classList.remove('hidden');
+            window.scrollTo(0,0);
+            document.body.style.overflowY = "hidden";
             setTimeout(() => {
                 document.getElementById('intro-warning').classList.add('hidden');
                 document.getElementById('envelope-quiz').classList.remove('hidden');
@@ -198,25 +223,25 @@
             triedOptions.clear();
 
             if (quizStep === 1) {
-                content.innerHTML = `<p style="font-size: 1.4em;">أنا بحبك قد إيه؟! 🤔</p>
+                content.innerHTML = `<p style="font-size: 1.2em;">أنا بحبك قد إيه؟! 🤔</p>
                     <button class="surprise-btn" onclick="checkQ1('1')">بحبك</button>
                     <button class="surprise-btn" onclick="checkQ1('2')">بحبك جداً</button>
                     <button class="surprise-btn" onclick="checkQ1('3')">بعشق أمك</button>`;
             } else if (quizStep === 2) {
-                content.innerHTML = `<p style="font-size: 1.4em;">إيه أكتر حاجة بحبها فيكي؟! 🤤</p>
+                content.innerHTML = `<p style="font-size: 1.2em;">إيه أكتر حاجة بحبها فيكي؟! 🤤</p>
                     <input type="text" id="q2-input" placeholder="اكتبي هنا...">
                     <button class="surprise-btn" onclick="checkQ2()">تأكيد</button>`;
             } else if (quizStep === 3) {
-                content.innerHTML = `<p style="font-size: 1.4em;">إيه أكتر كلمة أنتي بتحبيها مني؟! ❤️</p>
+                content.innerHTML = `<p style="font-size: 1.2em;">إيه أكتر كلمة أنتي بتحبيها مني؟! ❤️</p>
                     <input type="text" id="q3-input" placeholder="اكتبي هنا...">
                     <button class="surprise-btn" onclick="checkQ3()">تأكيد</button>`;
             } else if (quizStep === 4) {
-                content.innerHTML = `<p style="font-size: 1.4em;">مين أكتر حد بكرهه في الدنيا؟ 💀</p>
+                content.innerHTML = `<p style="font-size: 1.2em;">مين أكتر حد بكرهه في الدنيا؟ 💀</p>
                     <button class="surprise-btn" onclick="checkQ4('1')">أوشا</button>
                     <button class="surprise-btn" onclick="checkQ4('2')">داليا</button>
                     <button class="surprise-btn" onclick="checkQ4('3')">أنتي</button>`;
             } else if (quizStep === 5) {
-                content.innerHTML = `<p style="font-size: 1.4em;">السؤال الأهم بقى.. أنتي بتحبيني قد إيه؟ 🤔</p>
+                content.innerHTML = `<p style="font-size: 1.2em;">السؤال الأهم بقى.. أنتي بتحبيني قد إيه؟ 🤔</p>
                     <input type="text" readonly placeholder="دوسي هنا عشان تجاوبي..." onclick="goToWhatsapp()" style="cursor:pointer; background:#fff;">`;
             }
         }
@@ -230,10 +255,10 @@
 
         function checkQ2() {
             const val = document.getElementById('q2-input').value.trim();
-            if (val === "فخادك") { quizStep++; renderQuestion(); }
+            if (val === "فخادي") { quizStep++; renderQuestion(); }
             else {
                 triggerError(); attempts++;
-                if (attempts >= 2) { setTimeout(() => showFunnyMsg("فخادك.. هو في زيها؟! 🤤", 4000, true), 1600); }
+                if (attempts >= 2) { setTimeout(() => showFunnyMsg("فخادي.. هو في زيها؟! 🤤", 4000, true), 1600); }
             }
         }
 
@@ -260,6 +285,7 @@
             else {
                 document.getElementById('envelope-quiz').classList.add('hidden');
                 document.getElementById('notebook-container').classList.remove('hidden');
+                document.body.style.overflowY = "auto";
             }
         }
     </script>
